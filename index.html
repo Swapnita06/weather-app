@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="Weather-app">WEATHER APP</div>
+            <a href="#" class="toggle-button">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </a>
+            <div class="navbar-links">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="https://timesofindia.indiatimes.com/topic/weather/news">Weather News</a></li>
+                    <li><a href="https://www.google.com/maps/@20.1899785,84.4372567,7z?entry=ttu">Find my&nbsp;<span
+                                class="location">Location</span></a></li>
+                    <li><a href="sign.html">Sign In</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="card">
+            <div class="search">
+                <input type="text" placeholder="Enter city name" spellcheck="false">
+                <button><img src="images/search.png"></button>
+            </div>
+            <div class="error">
+                <p>Invalid City Name</p>
+            </div>
+            <div class="weather">
+                <img src="images/rain.png" class="weather-icon">
+                <h1 class="temp">22°C</h1>
+                <h2 class="city">NEW YORK</h2>
+                <div class="details">
+                    <div class="col">
+                        <img src="images/humidity.png">
+                        <div>
+                            <p class="humidity">50%</p>
+                            <p>Humidity</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <img src="images/wind.png">
+                        <div>
+                            <p class="wind">15 km/h</p>
+                            <p>Wind Speed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <script>
+        const apikey = "8304c554ec8c4ccdf3b409afc4d6c70e";
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        const weatherIcon = document.querySelector(".weather-icon");
+
+        searchBox.addEventListener("keyup", (e) => {
+            e.preventDefault();
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        })
+
+        async function checkWeather(city) {
+            const response = await fetch(`${apiurl}${city}&appid=${apikey}`);
+
+            if (response.status == 404) {
+                document.querySelector(".error").style.display = "block";
+                document.querySelector(".weather").style.display = "none";
+            } else {
+                document.querySelector(".error").style.display = "none";
+                const data = await response.json();
+                document.querySelector(".city").innerHTML = data.name;
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+                document.body.style.backgroundImage = `url('https://source.unsplash.com/random/1600x900/?${city}')`;
+
+                // You can simplify this section with a switch statement
+                switch (data.weather[0].main) {
+                    case "Clouds":
+                        weatherIcon.src = "images/clouds.png";
+                        break;
+                    case "Clear":
+                        weatherIcon.src = "images/clear.png";
+                        break;
+                    case "Rain":
+                        weatherIcon.src = "images/rain.png";
+                        break;
+                    case "Drizzle":
+                        weatherIcon.src = "images/drizzle.png";
+                        break;
+                    case "Mist":
+                        weatherIcon.src = "images/mist.png";
+                        break;
+                    case "Humidity":
+                        weatherIcon.src = "images/humidity.png";
+                        break;
+                    default:
+                        weatherIcon.src = "images/default.png"; // You can add a default image
+                        break;
+                }
+
+                document.querySelector(".weather").style.display = "block";
+            }
+        }
+
+        searchBtn.addEventListener("click", () => {
+            checkWeather(searchBox.value);
+        })
+    </script>
+    <script src="index.js"></script>
+</body>
+
+</html>
