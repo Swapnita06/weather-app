@@ -1,17 +1,17 @@
 const toggleButton = document.querySelector('.toggle-button');
 const navbarLinks = document.querySelector('.navbar-links');
 
-// Function to open the navbar
+
 function openNavbar() {
   navbarLinks.classList.add('active');
 }
 
-// Function to close the navbar
+
 function closeNavbar() {
   navbarLinks.classList.remove('active');
 }
 
-// Toggle the navbar when the toggle button is clicked
+
 toggleButton.addEventListener('click', () => {
   if (navbarLinks.classList.contains('active')) {
     closeNavbar();
@@ -20,13 +20,13 @@ toggleButton.addEventListener('click', () => {
   }
 });
 
-// Close the navbar when a navbar link is clicked
+
 const navbarLinksList = document.querySelectorAll('.navbar-links a');
 navbarLinksList.forEach((link) => {
   link.addEventListener('click', closeNavbar);
 });
 
-// Rest of your code for weather API remains unchanged
+
 let weather = {
   "apikey": "c626fefffccef5dfa90b463000809653"
 }
@@ -50,5 +50,5 @@ async function fetchWeather() {
   }
 }
 
-// Call the function to fetch weather data
+
 fetchWeather();
